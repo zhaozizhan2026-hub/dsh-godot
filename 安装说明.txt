@@ -1,0 +1,36 @@
+DSH Godot 插件安装说明
+
+一、复制文件
+1. 把 addons/dsh_godot 复制到你的 Godot 项目的 addons 目录。
+2. 把 dsh_godot 文件夹、run_dsh_godot.py、requirements.txt、.env.example
+   复制到你的 Godot 项目根目录。
+
+二、安装 Python 依赖
+在项目根目录打开 PowerShell：
+
+    python -m venv .venv
+    .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+
+三、配置 DeepSeek
+
+    Copy-Item .env.example .env
+    notepad .env
+
+填入：
+
+    DEEPSEEK_API_KEY=sk-你的key
+    DEEPSEEK_MODEL=deepseek-v4-pro
+
+四、启用插件
+打开 Godot：
+    Project > Project Settings > Plugins > DSH Godot
+
+启用后，右侧 DSH Godot 面板会自动启动本地服务并连接。
+
+五、使用
+- 输入任务，例如：创建一个 scripts/player.gd
+- 模型选择：deepseek-v4-pro / deepseek-v4-flash
+- 满血：长思考 + 联网 + 并行工具
+- 省电：快速、省 token
+- 停止：终止当前任务
+- 截图：当前 Godot 窗口截图显示在面板中

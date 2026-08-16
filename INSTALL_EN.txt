@@ -1,0 +1,36 @@
+DSH Godot Plugin — Installation Guide
+
+1. Copy files
+   - Copy addons/dsh_godot into your Godot project's addons directory.
+   - Copy dsh_godot/, run_dsh_godot.py, requirements.txt, and .env.example
+     into your Godot project root.
+
+2. Install Python dependencies
+   Open PowerShell in the project root:
+
+       python -m venv .venv
+       .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+
+3. Configure DeepSeek
+
+       Copy-Item .env.example .env
+       notepad .env
+
+   Fill in:
+
+       DEEPSEEK_API_KEY=sk-your-key
+       DEEPSEEK_MODEL=deepseek-v4-pro
+
+4. Enable the plugin
+   Open Godot:
+       Project > Project Settings > Plugins > DSH Godot
+
+   The DSH Godot dock starts the local service and connects automatically.
+
+5. Usage
+   - Example prompt: "Create scripts/player.gd"
+   - Model: deepseek-v4-pro / deepseek-v4-flash
+   - Full Power: long thinking + web + parallel tools
+   - Eco: faster and cheaper
+   - Stop: cancel the current task
+   - Screenshot: capture and display the current Godot window
