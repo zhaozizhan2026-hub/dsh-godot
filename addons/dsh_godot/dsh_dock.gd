@@ -20,6 +20,8 @@ var _stream_content_label: Label = null
 var _stream_reasoning_box: VBoxContainer = null
 var _stream_reasoning_content: Label = null
 
+var _api_key_edit: LineEdit
+var _save_key_button: Button
 var _status_label: Label
 var _mode_label: Label
 var _messages_box: VBoxContainer
@@ -61,6 +63,25 @@ func _build_ui() -> void:
 	_mode_label.text = "Mode: Default (Eco)"
 	_mode_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(_mode_label)
+
+	var key_row := HBoxContainer.new()
+	key_row.add_theme_constant_override("separation", 6)
+	add_child(key_row)
+
+	var key_label := Label.new()
+	key_label.text = "API Key"
+	key_row.add_child(key_label)
+
+	_api_key_edit = LineEdit.new()
+	_api_key_edit.secret = true
+	_api_key_edit.placeholder_text = "sk-... (saved to .env)"
+	_api_key_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	key_row.add_child(_api_key_edit)
+
+	_save_key_button = Button.new()
+	_save_key_button.text = "Save Key"
+	_save_key_button.pressed.connect(_save_api_key)
+	key_row.add_child(_save_key_button)
 
 	var controls := HBoxContainer.new()
 	controls.add_theme_constant_override("separation", 6)
@@ -173,6 +194,46 @@ func _send_prompt() -> void:
 func _on_start_pressed() -> void:
 	if _service_pid == 0 or not OS.is_process_running(_service_pid):
 		start_service()
+	_connect_to_service()
+
+
+func _save_api_key() -> void:
+	var key := _api_key_edit.text.strip_edges()
+	if key.is_empty():
+		_append_text("System", "Paste your DEEPSEEK_API_KEY first.", Color(1.0, 0.55, 0.45))
+		return
+	var path := "res://.env"
+	var new_lines := PackedStringArray()
+	var replaced := false
+	if FileAccess.file_exists(path):
+		var file := FileAccess.open(path, FileAccess.READ)
+		if file != null:
+			for line in file.get_as_text().split("\n"):
+				if line.strip_edges().begins_with("DEEPSEEK_API_KEY="):
+					new_lines.append("DEEPSEEK_API_KEY=%s" % key)
+					replaced = true
+				else:
+					new_lines.append(line)
+			file.close()
+	if not replaced:
+		new_lines.append("DEEPSEEK_API_KEY=%s" % key)
+	var out := FileAccess.open(path, FileAccess.WRITE)
+	if out == null:
+		_append_text("System", "Could not write .env: error %d" % FileAccess.get_open_error(), Color(1.0, 0.4, 0.4))
+		return
+	out.store_string("\n".join(new_lines))
+	out.close()
+	_api_key_edit.clear()
+	_append_text("System", "API key saved to .env. Restarting dsh service...", Color(0.6, 1.0, 0.6))
+	_restart_service()
+
+
+func _restart_service() -> void:
+	_ws.close()
+	if _service_pid != 0:
+		OS.kill(_service_pid)
+		_service_pid = 0
+	start_service()
 	_connect_to_service()
 
 
