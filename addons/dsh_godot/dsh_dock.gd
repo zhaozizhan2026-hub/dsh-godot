@@ -688,7 +688,7 @@ func _host() -> String:
 
 
 func _port() -> int:
-	return int(_setting("dsh_godot/port", 9600))
+	return int(_setting("dsh_godot/port", 9610))
 
 
 func _auto_start() -> bool:

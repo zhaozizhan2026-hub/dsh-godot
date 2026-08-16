@@ -29,7 +29,8 @@ func _register_settings() -> void:
 	_seed_setting(es, "dsh_godot/auto_start", true, TYPE_BOOL)
 	es.set_setting("dsh_godot/auto_start", true)
 	_seed_setting(es, "dsh_godot/host", "127.0.0.1", TYPE_STRING)
-	_seed_setting(es, "dsh_godot/port", 9600, TYPE_INT)
+	_seed_setting(es, "dsh_godot/port", 9610, TYPE_INT)
+	es.set_setting("dsh_godot/port", 9610)
 	_seed_setting(es, "dsh_godot/python_path", "", TYPE_STRING)
 	es.add_property_info({
 		"name": "dsh_godot/auto_start",

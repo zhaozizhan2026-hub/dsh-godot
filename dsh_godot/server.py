@@ -68,7 +68,6 @@ class DshGodotService:
 
     async def start(self) -> None:
         self._build_harness()
-        await self.provider.start()
         if self.harness is not None:
             self._stop_event = asyncio.Event()
             self.agent = DeepSeekGodotAgent(
@@ -98,6 +97,11 @@ class DshGodotService:
             async with websockets.serve(
                 self._handle, self.config.ws_host, self.config.dock_port
             ):
+                # Bind the WebSocket first, then probe Godot AI MCP in the
+                # background.  A missing/hanging MCP endpoint must never delay
+                # the dock connection or make the service look "not started".
+                provider_task = asyncio.create_task(self.provider.start())
+                await provider_task
                 await asyncio.Future()
         finally:
             await self.close()

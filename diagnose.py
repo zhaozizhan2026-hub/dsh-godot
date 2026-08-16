@@ -47,11 +47,11 @@ def main() -> int:
 
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind(("127.0.0.1", 9600))
-        check("port 9600 free", True)
+            s.bind(("127.0.0.1", 9610))
+        check("port 9610 free", True)
     except OSError as exc:
         all_ok = False
-        check("port 9600 free", False, "another dsh service is already running: " + str(exc))
+        check("port 9610 free", False, "another dsh service is already running: " + str(exc))
 
     try:
         import dsh_godot  # noqa: F401

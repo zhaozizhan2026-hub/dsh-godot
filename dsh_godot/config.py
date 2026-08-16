@@ -72,7 +72,7 @@ class BridgeConfig:
     stdio_args: list[str] = field(default_factory=list)
     http_port: int = DEFAULT_GODOT_AI_HTTP_PORT
     ws_port: int = DEFAULT_GODOT_AI_WS_PORT
-    mcp_timeout: float = 30.0
+    mcp_timeout: float = 5.0
     mcp_sse_read_timeout: float = 300.0
 
     # Tool surface -----------------------------------------------------------
@@ -95,7 +95,7 @@ class BridgeConfig:
     # dsh Godot dock / service -------------------------------------------------
     project_root: str = ""
     ws_host: str = "127.0.0.1"
-    dock_port: int = 9600
+    dock_port: int = 9610
     screenshot_dir: str = ""
     vision_api_key: str = ""
     vision_base_url: str = "https://api.openai.com/v1"
@@ -173,7 +173,7 @@ class BridgeConfig:
             ),
             project_root=env.get("DSH_GODOT_PROJECT_ROOT", "").strip(),
             ws_host=env.get("DSH_GODOT_WS_HOST", "127.0.0.1").strip(),
-            dock_port=_env_int(env, "DSH_GODOT_WS_PORT", 9600),
+            dock_port=_env_int(env, "DSH_GODOT_WS_PORT", 9610),
             screenshot_dir=env.get("DSH_GODOT_SCREENSHOT_DIR", "").strip(),
             vision_api_key=env.get("DSH_VISION_API_KEY", "").strip(),
             vision_base_url=env.get(
